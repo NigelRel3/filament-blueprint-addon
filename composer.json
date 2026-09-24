@@ -34,12 +34,5 @@
     },
     "config": {
         "sort-packages": true
-    },
-    "extra": {
-        "laravel": {
-            "providers": [
-                "NigelRel3\\FilamentBlueprintAddon\\FilamentBlueprintAddonServiceProvider"
-            ]
-        }
     }
 }
