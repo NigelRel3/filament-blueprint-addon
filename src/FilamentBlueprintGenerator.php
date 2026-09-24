@@ -1,6 +1,6 @@
 <?php
 
-namespace NigelR\FilamentBlueprintAddon;
+namespace NigelRel3\FilamentBlueprintAddon;
 
 use Blueprint\Contracts\Generator;
 use Blueprint\Models\Model;

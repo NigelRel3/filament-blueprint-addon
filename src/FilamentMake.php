@@ -1,6 +1,6 @@
 <?php
 
-namespace NigelR\FilamentBlueprintAddon;
+namespace NigelRel3\FilamentBlueprintAddon;
 
 use Blueprint\Models\Model as BlueprintModel;
 use Filament\Commands\MakeResourceCommand;

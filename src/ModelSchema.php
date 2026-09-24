@@ -1,6 +1,6 @@
 <?php
 
-namespace NigelR\FilamentBlueprintAddon;
+namespace NigelRel3\FilamentBlueprintAddon;
 
 use Blueprint\Models\Column;
 use Blueprint\Models\Model as BlueprintModel;
@@ -79,5 +79,11 @@ class ModelSchema extends SchemaBuilder
             $tx .= '(' . implode(',', $column->attributes() ?? []) . ')';
         }
         return $tx;
+    }
+
+    public function getIndexes($table): array
+    {
+        // TODO Implement index retrieval based on the blueprint model
+        return [];
     }
 }

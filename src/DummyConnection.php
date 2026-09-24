@@ -1,6 +1,6 @@
 <?php
 
-namespace NigelR\FilamentBlueprintAddon;
+namespace NigelRel3\FilamentBlueprintAddon;
 
 use Illuminate\Database\Connection;
 

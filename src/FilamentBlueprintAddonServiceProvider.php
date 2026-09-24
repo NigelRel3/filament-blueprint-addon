@@ -1,12 +1,12 @@
 <?php
 
-namespace NigelR\FilamentBlueprintAddon;
+namespace NigelRel3\FilamentBlueprintAddon;
 
 use Blueprint\Blueprint;
 use Illuminate\Database\Connection;
 use Illuminate\Support\ServiceProvider;
-use NigelR\FilamentBlueprintAddon\FilamentBlueprintGenerator;
-use NigelR\FilamentBlueprintAddon\FilamentLexer;
+use NigelRel3\FilamentBlueprintAddon\FilamentBlueprintGenerator;
+use NigelRel3\FilamentBlueprintAddon\FilamentLexer;
 
 class FilamentBlueprintAddonServiceProvider extends ServiceProvider
 {
