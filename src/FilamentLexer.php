@@ -1,6 +1,6 @@
 <?php
 
-namespace NigelRel3\FilamentBlueprintAddon;
+namespace NigelR\FilamentBlueprintAddon;
 
 use Blueprint\Contracts\Lexer;
 

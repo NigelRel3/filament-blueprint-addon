@@ -1,20 +1,24 @@
 <?php
 
-namespace NigelRel3\FilamentBlueprintAddon;
+namespace NigelR\FilamentBlueprintAddon;
 
 use Blueprint\Models\Column;
 use Blueprint\Models\Model as BlueprintModel;
 use Blueprint\Tree;
 use Illuminate\Database\Schema\Builder as SchemaBuilder;
-use Illuminate\Database\Connection;
 use Illuminate\Support\Str;
 
+/**
+ * Class ModelSchema
+ *
+ * A custom schema builder that uses the blueprint draft.yaml for the table columns.
+ */
 class ModelSchema extends SchemaBuilder
 {
     protected static BlueprintModel $model;
     protected static Tree $tree;
 
-    public function __construct(?Connection $connection = null)
+    public function __construct()
     {
     }
 
@@ -31,28 +35,69 @@ class ModelSchema extends SchemaBuilder
     public function getColumns($table): array
     {
         $columns = [];
-        // TODO As the filament section only uses the name for matching, maybe allow alternative for database table name
         $table = Str::singular(Str::studly($table));
+        $thisTable = self::$tree->models()[$table];
+
+        if (!$thisTable) {
+            return [];
+        }
         /**
-         * @var \Blueprint\Models\Column $column
+         * @var Column $column
          */
-        // TODO Verify that the column modifiers and default values are correctly handled
-        foreach (self::$tree->models()[$table]->columns() as $column){
-            $type = $this->translateType($column);
+        foreach ($thisTable->columns() as $column){
+            $typeName = $this->translateType($column);
+            $type = $typeName;
+            if ($type === 'enum') {
+                $type .= ' (' . implode(',', $column->attributes() ?? []) . ')';
+            }
+            elseif ($type === 'varchar') {
+                $length = (int)($column->attributes()[0] ?? 255);
+                $type .= "($length)";
+            }
             $definition = [
                 'name' => $column->name(),
-                'type_name' => $type,
+                'type_name' => $typeName,
                 'type' => $type,
                 'collation' => null,
-                'nullable' => in_array('nullable', $column->modifiers()),
+                'nullable' => in_array('nullable', $column->modifiers() ?? []),
                 'default' => when($column->modifiers()[0]['default'] ?? null, fn() => $column->modifiers()[0]['default'], null),
                 'auto_increment' => $column->name() === 'id',
                 'comment' => '',
                 'generation' => null,
+
+                'length' => when($typeName === 'varchar', fn() => $column->attributes()[0] ?? 255, null),
+
+                'values' => when($typeName === 'enum', fn() => $length ?? [], null),
             ];
 
             $columns[] = $definition;
         }
+
+        $additionalColumns = [];
+        if ($thisTable->usesSoftDeletes()) {
+            $additionalColumns[] = 'deleted_at';
+        }
+        if ($thisTable->usesTimestamps()) {
+            $additionalColumns[] = 'created_at';
+            $additionalColumns[] = 'updated_at';
+        }
+
+        foreach ($additionalColumns as $timestampColumn) {
+            $columns[] = [
+                'name' => $timestampColumn,
+                'type_name' => 'datetime',
+                'type' => 'datetime',
+                'collation' => null,
+                'nullable' => false,
+                'default' => null,
+                'auto_increment' => false,
+                'comment' => '',
+                'generation' => null,
+                'length' => null,
+                'values' => null,
+            ];
+        }
+
         return $columns;
     }
 
@@ -62,28 +107,12 @@ class ModelSchema extends SchemaBuilder
     protected function translateType(Column $column): string
     {
         $type = $column->dataType();
-        $tx = match($type) {
+        return match($type) {
             'string' => 'varchar',
             'boolean' => 'tinyint(1)',
             'dateTime' => 'datetime',
             'id' => 'bigint unsigned',
             default => $type,
         };
-
-        if ($tx === 'varchar') {
-            $length = $column->attributes()['length'] ?? 255;
-            $tx .= "($length)";
-        }
-
-        if ($type === 'enum') {
-            $tx .= '(' . implode(',', $column->attributes() ?? []) . ')';
-        }
-        return $tx;
-    }
-
-    public function getIndexes($table): array
-    {
-        // TODO Implement index retrieval based on the blueprint model
-        return [];
     }
 }

@@ -1,12 +1,11 @@
 <?php
 
-namespace NigelRel3\FilamentBlueprintAddon;
+namespace NigelR\FilamentBlueprintAddon;
 
 use Blueprint\Models\Model as BlueprintModel;
 use Filament\Commands\MakeResourceCommand;
 use Filament\Facades\Filament;
 use Illuminate\Support\Stringable;
-use Override;
 use Illuminate\Container\Container;
 
 class FilamentMake extends MakeResourceCommand
@@ -50,10 +49,6 @@ class FilamentMake extends MakeResourceCommand
 
     protected function configureCluster(): void
     {
-        // TODO Determine if the resource is clusterFqn
-
-        // https://filamentphp.com/docs/5.x/navigation/clusters#clusters
-
         $this->clusterFqn = null;
     }
 
@@ -90,7 +85,7 @@ class FilamentMake extends MakeResourceCommand
         $this->modelFqn = "{$modelNamespace}\\{$this->modelFqnEnd}";
 
         Container::getInstance()->resolving($this->modelFqn, function ($object, $app) {
-            $object->setConnection('dummy.connection');
+            $object->setConnection('filament_dummy.connection');
             return $object;
         });
     }
@@ -116,7 +111,6 @@ class FilamentMake extends MakeResourceCommand
     /**
      * Provides dummy values for the given option key.
      */
-    #[Override]
     public function option($key = null)
     {
         return match ($key) {

@@ -1,12 +1,12 @@
 <?php
 
-namespace NigelRel3\FilamentBlueprintAddon;
+namespace NigelR\FilamentBlueprintAddon;
 
 use Blueprint\Blueprint;
 use Illuminate\Database\Connection;
 use Illuminate\Support\ServiceProvider;
-use NigelRel3\FilamentBlueprintAddon\FilamentBlueprintGenerator;
-use NigelRel3\FilamentBlueprintAddon\FilamentLexer;
+use NigelR\FilamentBlueprintAddon\FilamentBlueprintGenerator;
+use NigelR\FilamentBlueprintAddon\FilamentLexer;
 
 class FilamentBlueprintAddonServiceProvider extends ServiceProvider
 {
@@ -15,7 +15,6 @@ class FilamentBlueprintAddonServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-
         if ($this->app->runningInConsole()) {
             $this->publishes([
                 dirname(__DIR__) . '/config/filamentBlueprint.php' => config_path('filamentBlueprint.php'),
@@ -26,15 +25,16 @@ class FilamentBlueprintAddonServiceProvider extends ServiceProvider
     /**
      * Register the application services.
      */
+    // TODO Test
     public function register(): void
     {
-        Connection::resolverFor('dummy', function ($connection, $config, $name) {
-            return new DummyConnection();
-        });
+        Connection::resolverFor('filament_dummy', fn ($connection, $config, $name) => 
+            new DummyConnection()
+        );
 
         config([
-            'database.connections.dummy.connection' => [
-                'driver' => 'dummy',
+            'database.connections.filament_dummy.connection' => [
+                'driver' => 'filament_dummy',
                 'database' => 'none',
             ],
         ]);
@@ -44,11 +44,8 @@ class FilamentBlueprintAddonServiceProvider extends ServiceProvider
             'filamentBlueprint'
         );
 
-        $this->app->singleton(FilamentBlueprintGenerator::class, function ($app) {
-            $generator = new FilamentBlueprintGenerator($app['files']);
-
-            return $generator;
-        });
+        $this->app->singleton(FilamentBlueprintGenerator::class, 
+            fn ($app): FilamentBlueprintGenerator => new FilamentBlueprintGenerator($app['files']));
 
         $this->app->extend(Blueprint::class, function ($blueprint, $app) {
             $blueprint->registerGenerator($app[FilamentBlueprintGenerator::class]);
