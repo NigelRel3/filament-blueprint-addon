@@ -36,9 +36,9 @@ class ModelSchema extends SchemaBuilder
     {
         $columns = [];
         $table = Str::singular(Str::studly($table));
-        $thisTable = self::$tree->models()[$table];
+        $thisTable = self::$tree->models()[$table] ?? null;
 
-        if (!$thisTable) {
+        if ($thisTable === null) {
             return [];
         }
         /**
@@ -67,7 +67,7 @@ class ModelSchema extends SchemaBuilder
 
                 'length' => when($typeName === 'varchar', fn() => $column->attributes()[0] ?? 255, null),
 
-                'values' => when($typeName === 'enum', fn() => $length ?? [], null),
+                'values' => when($typeName === 'enum', fn() => $column->attributes() ?? [], null),
             ];
 
             $columns[] = $definition;
@@ -88,7 +88,7 @@ class ModelSchema extends SchemaBuilder
                 'type_name' => 'datetime',
                 'type' => 'datetime',
                 'collation' => null,
-                'nullable' => false,
+                'nullable' => $timestampColumn === 'deleted_at',
                 'default' => null,
                 'auto_increment' => false,
                 'comment' => '',

@@ -33,7 +33,7 @@ class FilamentBlueprintAddonServiceProvider extends ServiceProvider
         );
 
         config([
-            'database.connections.filament_dummy.connection' => [
+            'database.connections.filament_dummy' => [
                 'driver' => 'filament_dummy',
                 'database' => 'none',
             ],

@@ -85,7 +85,7 @@ class FilamentMake extends MakeResourceCommand
         $this->modelFqn = "{$modelNamespace}\\{$this->modelFqnEnd}";
 
         Container::getInstance()->resolving($this->modelFqn, function ($object, $app) {
-            $object->setConnection('filament_dummy.connection');
+            $object->setConnection('filament_dummy');
             return $object;
         });
     }
