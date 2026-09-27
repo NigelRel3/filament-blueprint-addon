@@ -1,0 +1,30 @@
+# https://blueprint.laravelshift.com/docs/keys-and-indexes/
+models:
+  AppUser:
+    name: string
+    email: string:255
+    phone: string:15 nullable
+    status: enum:active,inactive default:active
+    date_of_birth: date
+    datetime_of_registration: datetime
+    preferred_address_id: id foreign:addresses.id nullable
+    relationships:
+      hasMany: Address
+
+  Address:
+    app_user_id: id foreign
+    address_1: string
+    address_2: string
+    city: string
+    postcode: string
+    softDeletes: true
+    relationships:
+      belongsTo: AppUser
+
+filament:
+  # Options applied to all models by default
+  options: panel:admin view:true
+  # CSV list of models created with default options
+  models: AppUser
+  # Individual model options override the default options
+  Address: view:false title:postcode
