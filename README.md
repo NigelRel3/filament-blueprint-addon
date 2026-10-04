@@ -1,10 +1,12 @@
 # Filament Blueprint Addon
-Building on the great work of Blurprint, this extension allows the generation of Filament forms and tables for models with the `php artisan blueprint:build` command.
+Building on the great work of Blueprint, this extension allows the generation of Filament forms and tables for models with the `php artisan blueprint:build` command.
+
+The main issue this overcomes is that the Filament generate option will normally read the columns from the database after any migrations have been applied. When generating the application using Blueprint, these migrations are only run after the blueprint:build command has been run. To shortcut this, a dummy connection is added to the models which generates data from the Blueprint model definition.
 
 ## Installation
 Install Laravel, Filament and Blueprint.
 
-Install this package as a dev dependancy using composer:
+Install this package as a dev dependency using composer:
 
 ```bash
 composer require --dev NigelR/filament-blueprint-addon
@@ -65,7 +67,11 @@ The options which are supported in this version are:
 |view  | false | If a view only form should be generated | [link](https://filamentphp.com/docs/5.x/resources/overview#generating-a-view-page) |
 |simple| false | Use a modal for managing records | [link](https://filamentphp.com/docs/5.x/resources/overview#simple-modal-resources)
 |soft-deletes| false | When defining softDeletes in the model, this is propergated through to filament | [link](https://filamentphp.com/docs/5.x/resources/overview#handling-soft-deletes)|
-|title | | Used to identify the rows in the table | [link](https://filamentphp.com/docs/5.x/resources/overview#record-titles)
+|title | * | Used to identify the rows in the table | [link](https://filamentphp.com/docs/5.x/resources/overview#record-titles)
+
+*Notes:*
+
+* *If not provided, Filament tries to guess the column name from the definition.*
 
 Looking at the above example draft.yml, this shows how the options can be set with each one being listed as `name:value` pairs with a space as the separator between multiple options.
 
