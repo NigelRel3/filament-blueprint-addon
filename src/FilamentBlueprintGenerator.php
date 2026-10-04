@@ -34,6 +34,12 @@ class FilamentBlueprintGenerator implements Generator
         // e.g. options: panel:admin view:true
         $globalOptions = $filamentSettings['options'] ?? '';
 
+        // Make sure all models are configured to use dummy database connections
+        foreach ($tree->models() as $model) {
+            $generator->setModel($model);
+            $generator->configureModel();
+        }
+        
         /** @var BlueprintModel $model */
         foreach ($tree->models() as $model) {
             if (isset($filamentSettings[$model->name()])) {

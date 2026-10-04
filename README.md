@@ -1,9 +1,11 @@
 # Filament Blueprint Addon
+
 Building on the great work of Blueprint, this extension allows the generation of Filament forms and tables for models with the `php artisan blueprint:build` command.
 
-The main issue this overcomes is that the Filament generate option will normally read the columns from the database after any migrations have been applied. When generating the application using Blueprint, these migrations are only run after the blueprint:build command has been run. To shortcut this, a dummy connection is added to the models which generates data from the Blueprint model definition.
+The main issue this overcomes is that the Filament generate option will normally read the columns from the database after any migrations have been applied. When generating the application using Blueprint, these migrations are only run after the `blueprint:build` command has been run. To shortcut this, a dummy connection is added to the models which generates data from the Blueprint model definition.
 
 ## Installation
+
 Install Laravel, Filament and Blueprint.
 
 Install this package as a dev dependency using composer:
@@ -13,8 +15,9 @@ composer require --dev NigelR/filament-blueprint-addon
 ```
 
 ## Usage
+
 Refer to the [Blueprint - Basic Usage](https://github.com/laravel-shift/blueprint#basic-usage)
-for a better understanding of what Blueprint is and instructions as to how to use core Blueprint. 
+for a better understanding of what Blueprint is and instructions as to how to use core Blueprint.
 
 In addition to the existing sections, this adds an additional `filament` section which allows you to configure which filament resources to build and configure some of the options. The example below shows how general defaults can be applied to models and also how to override these for specific models.
 
@@ -61,17 +64,19 @@ Once the build has completed - migrate the database, create a filament user (`ph
 This code links into the build process of Filament and is currently tested using Filament 5. It may work for other versions and compatibility would be useful to know.
 
 The options which are supported in this version are:
-| Name | Default | Use                           | Documentation |
-|------|:-------:|-----------------------------------------|:---:|
-|panel | admin | Which panel to add the model to         | [link](https://filamentphp.com/docs/5.x/panel-configuration) |
-|view  | false | If a view only form should be generated | [link](https://filamentphp.com/docs/5.x/resources/overview#generating-a-view-page) |
-|simple| false | Use a modal for managing records | [link](https://filamentphp.com/docs/5.x/resources/overview#simple-modal-resources)
-|soft-deletes| false | When defining softDeletes in the model, this is propergated through to filament | [link](https://filamentphp.com/docs/5.x/resources/overview#handling-soft-deletes)|
-|title | * | Used to identify the rows in the table | [link](https://filamentphp.com/docs/5.x/resources/overview#record-titles)
+
+
+| Name         | Default | Use                                                                             |                                   Documentation                                   |
+| ------------ | :-----: | ------------------------------------------------------------------------------- | :--------------------------------------------------------------------------------: |
+| panel        |  admin  | Which panel to add the model to                                                 |            [link](https://filamentphp.com/docs/5.x/panel-configuration)            |
+| view         |  false  | If a view only form should be generated                                         | [link](https://filamentphp.com/docs/5.x/resources/overview#generating-a-view-page) |
+| simple       |  false  | Use a modal for managing records                                                | [link](https://filamentphp.com/docs/5.x/resources/overview#simple-modal-resources) |
+| soft-deletes |  false  | When defining softDeletes in the model, this is propergated through to filament | [link](https://filamentphp.com/docs/5.x/resources/overview#handling-soft-deletes) |
+| title        |    *    | Used to identify the rows in the table                                          |     [link](https://filamentphp.com/docs/5.x/resources/overview#record-titles)     |
 
 *Notes:*
 
-* *If not provided, Filament tries to guess the column name from the definition.*
+* *If not provided, Fillament tries to guess the column name from the table definition.*
 
 Looking at the above example draft.yml, this shows how the options can be set with each one being listed as `name:value` pairs with a space as the separator between multiple options.
 
