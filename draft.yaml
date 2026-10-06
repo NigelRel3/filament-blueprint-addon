@@ -23,8 +23,10 @@ models:
 
 filament:
   # Options applied to all models by default
-  options: panel:admin view:true
+  options: panel:admin view:true cluster:Users
   # CSV list of models created with default options
   models: AppUser
+  # CSV list of clusters
+  clusters: Users, Addresses
   # Individual model options override the default options
-  Address: view:false title:postcode
+  Address: view:false title:postcode cluster:Addresses

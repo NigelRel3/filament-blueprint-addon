@@ -48,11 +48,13 @@ models:
 
 filament:
     # Options applied to all models by default
-    options: panel:admin view:true
+    options: panel:admin view:true cluster:Users
+    # CSV list of clusters
+    clusters: Users, Addresses
     # CSV list of models created with default options
     models: AppUser
     # Individual model options override the default options
-    Address: view:false title:postcode
+    Address: view:false title:postcode cluster:Addresses
 ```
 
 Run the `blueprint:build` command to generate the models/seeders/migrations etc. as well as the Filament resources automatically.
@@ -73,12 +75,26 @@ The options which are supported in this version are:
 | simple       |  false  | Use a modal for managing records                                                | [link](https://filamentphp.com/docs/5.x/resources/overview#simple-modal-resources) |
 | soft-deletes |  false  | When defining softDeletes in the model, this is propergated through to filament | [link](https://filamentphp.com/docs/5.x/resources/overview#handling-soft-deletes) |
 | title        |    *    | Used to identify the rows in the table                                          |     [link](https://filamentphp.com/docs/5.x/resources/overview#record-titles)     |
+| cluster      |         | Indicate which menu to list this table under (blank for main menu)              | [link](https://filamentphp.com/docs/5.x/navigation/clusters)
 
 *Notes:*
 
 * *If not provided, Fillament tries to guess the column name from the table definition.*
 
 Looking at the above example draft.yml, this shows how the options can be set with each one being listed as `name:value` pairs with a space as the separator between multiple options.
+
+When defining clusters - you will need to add the appropriate line to the panel provider as descriobed [here](https://filamentphp.com/docs/5.x/navigation/clusters#creating-a-cluster). The example shows adding the call to `discoverClusters` in the following example.
+
+```php
+public function panel(Panel $panel): Panel
+{
+    return $panel
+        // ...
+        ->discoverResources(in: app_path('Filament/Resources'), for: 'App\\Filament\\Resources')
+        ->discoverPages(in: app_path('Filament/Pages'), for: 'App\\Filament\\Pages')
+        ->discoverClusters(in: app_path('Filament/Clusters'), for: 'App\\Filament\\Clusters');
+}
+```
 
 For more details about Filament and how to use it, please refer to https://filamentphp.com/docs/5.x/introduction/overview
 

@@ -49,7 +49,11 @@ class FilamentMake extends MakeResourceCommand
 
     protected function configureCluster(): void
     {
-        $this->clusterFqn = null;
+        $this->resourcesDirectory = app_path('Filament/Resources');
+        $this->resourcesNamespace = app()->getNamespace() . 'Filament\\Resources';
+        if ($this->options['cluster'] ?? false) {
+            $this->clusterFqn = 'App\\Filament\\Clusters\\' . $this->options['cluster'] . '\\' . $this->options['cluster'] . 'Cluster';
+        }
     }
 
     protected function configureIsSimple(): void
@@ -67,7 +71,7 @@ class FilamentMake extends MakeResourceCommand
         $this->panel = Filament::getPanel($this->options['panel'] ?? 'admin', isStrict: false);
     }
 
-    protected function configureModel(): void
+    public function configureModel(): void
     {
         $this->modelFqnEnd = (string) str($this->model->name())
             ->trim('/')
