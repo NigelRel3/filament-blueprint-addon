@@ -115,4 +115,14 @@ class ModelSchema extends SchemaBuilder
             default => $type,
         };
     }
+
+    public function getIndexes($table)
+    {
+        return [];
+    }
+
+    public function getForeignKeys($table)
+    {
+        return [];
+    }
 }
