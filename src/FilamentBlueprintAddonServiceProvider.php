@@ -7,6 +7,9 @@ use Illuminate\Database\Connection;
 use Illuminate\Support\ServiceProvider;
 use NigelR\FilamentBlueprintAddon\FilamentBlueprintGenerator;
 use NigelR\FilamentBlueprintAddon\FilamentLexer;
+use NigelR\FilamentBlueprintAddon\FilamentMake;
+use Illuminate\Console\View\Components\Factory;
+use Symfony\Component\Console\Output\ConsoleOutput;
 
 class FilamentBlueprintAddonServiceProvider extends ServiceProvider
 {
@@ -44,8 +47,14 @@ class FilamentBlueprintAddonServiceProvider extends ServiceProvider
             'filamentBlueprint'
         );
 
+        $this->app->singleton(FilamentMake::class, 
+            fn ($app): FilamentMake => 
+                new FilamentMake(app(Factory::class, ['output' => new ConsoleOutput()]))
+        );
         $this->app->singleton(FilamentBlueprintGenerator::class, 
-            fn ($app): FilamentBlueprintGenerator => new FilamentBlueprintGenerator($app['files']));
+            fn ($app): FilamentBlueprintGenerator => 
+                new FilamentBlueprintGenerator($app['files'], $app[FilamentMake::class])
+        );
 
         $this->app->extend(Blueprint::class, function ($blueprint, $app) {
             $blueprint->registerGenerator($app[FilamentBlueprintGenerator::class]);

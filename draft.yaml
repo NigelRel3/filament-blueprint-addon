@@ -27,6 +27,9 @@ filament:
   # CSV list of models created with default options
   models: AppUser
   # CSV list of clusters
-  clusters: Users, Addresses
+  # clusters: Users, Addresses
+  # To allow lists of models in clusters
+  clusters: 
+    Users: AppUser, Address
   # Individual model options override the default options
-  Address: view:false title:postcode cluster:Addresses
+  Address: view:false title:postcode
